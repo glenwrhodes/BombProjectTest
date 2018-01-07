@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
+#include "MapGenerator.h"
 #include "BombermanTestGameModeBase.generated.h"
 
 /**
@@ -14,7 +15,25 @@ class BOMBERMANTEST_API ABombermanTestGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
 	
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
+public:
+
+	virtual void Tick(float DeltaTime) override;
+
+	UPROPERTY(EditAnywhere, Category = SpawningBP)
+		TSubclassOf<AMapGenerator> MapGeneratorActor;
 	
+	static ABombermanTestGameModeBase *instance;
+
+	UFUNCTION(BlueprintCallable)
+		void StartGame();
 	
-	
+private:
+	int32 alivePlayers = 0;
+	bool gameActive = false;
+	AMapGenerator *mapGenerator = nullptr;
+
 };
