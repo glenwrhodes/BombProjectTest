@@ -42,6 +42,13 @@ void ABombermanPlayer::Tick(float DeltaTime)
 		MoveComp->AddInputVector(move);
 	}
 
+	if (remoteControlled)
+	{
+		remoteControlTimeLeft -= DeltaTime;
+		if (remoteControlTimeLeft <= 0)
+			remoteControlled = false;
+	}
+
 }
 
 // Called to bind functionality to input

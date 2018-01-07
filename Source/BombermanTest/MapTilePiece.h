@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Powerup.h"
 #include "MapTilePiece.generated.h"
 
 UCLASS()
@@ -31,5 +32,8 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = BomberMan)
 		float dropChance = 0.3f;
+
+	UPROPERTY(EditAnywhere, Category = BomberMan)
+		TArray<TSubclassOf<APowerup>> droppablePickups;
 	
 };

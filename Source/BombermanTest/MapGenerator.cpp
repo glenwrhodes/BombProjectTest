@@ -4,6 +4,7 @@
 #include "Classes/AI/Navigation/NavigationSystem.h"
 #include "Bomb.h"
 #include "BombermanPlayer.h"
+#include "Powerup.h"
 #include "Engine.h"
 
 // Sets default values
@@ -141,8 +142,14 @@ bool AMapGenerator::DidDestroyBlock(int32 indx)
 
 				if (FMath::FRand() <= blockPiece->dropChance)
 				{
-					// TODO: Drop pickups
-
+					if (blockPiece->droppablePickups.Num() > 0)
+					{
+						int32 s = FMath::RandRange(0, blockPiece->droppablePickups.Num() - 1);
+						TSubclassOf<APowerup> p = blockPiece->droppablePickups[s];
+						FVector spawnLocation = blockPiece->GetActorLocation();
+						spawnLocation.Z = 54;
+						GetWorld()->SpawnActor<APowerup>(p, spawnLocation, FRotator::ZeroRotator);
+					}
 				}
 
 				GetWorld()->SpawnActor<AActor>(Explosion, blockPiece->GetActorLocation(), FRotator::ZeroRotator);
@@ -186,6 +193,12 @@ void AMapGenerator::CheckOverlappingGameElements(FVector position)
 				// If the explosion is overlapping a player, kill them.
 				ABombermanPlayer* p = Cast<ABombermanPlayer>(a);
 				p->Die();
+			}
+			else if (type->IsChildOf(APowerup::StaticClass()))
+			{
+				// If the explosion is overlapping a powerup, destroy it.
+				APowerup* p = Cast<APowerup>(a);
+				GetWorld()->DestroyActor(p);
 			}
 			else if (type->IsChildOf(ABomb::StaticClass()))
 			{
