@@ -36,5 +36,12 @@ void ABombermanTestGameModeBase::StartGame()
 	mapGenerator->GenerateMapData();
 	mapGenerator->GenerateMapGeometry();
 
+	// Create a second local player.  Must do this manually, because Unreal Engine wants to spawn second
+	// players in another window, rather than on the same screen.
+	UGameplayStatics::CreatePlayer(GetWorld(), 1, true);
+	timeLeft = roundTime;
+	alivePlayers = 2;
+	gameActive = true;
+
 }
 

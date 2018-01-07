@@ -66,6 +66,7 @@ public:
 	/* Applies a bomb to a specific map coordinate, with a specific range on X and Y.
 	Responsible for destroying the blocks, and playing an explosion animation
 	*/
+	void DoBombAt(int32 x, int32 y, int32 range);
 	
 private:
 	TArray<TileType> tiles;

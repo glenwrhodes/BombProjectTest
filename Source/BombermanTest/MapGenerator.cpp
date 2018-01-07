@@ -116,3 +116,8 @@ void AMapGenerator::GenerateMapGeometry()
 	}
 }
 
+void AMapGenerator::DoBombAt(int32 x, int32 y, int32 range)
+{
+	// Stub
+}
+

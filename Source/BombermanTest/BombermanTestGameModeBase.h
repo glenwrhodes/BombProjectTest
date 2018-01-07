@@ -28,6 +28,12 @@ public:
 	
 	static ABombermanTestGameModeBase *instance;
 
+	UPROPERTY(BlueprintReadWrite)
+		float timeLeft = 180.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		float roundTime = 180.0f;
+
 	UFUNCTION(BlueprintCallable)
 		void StartGame();
 	
