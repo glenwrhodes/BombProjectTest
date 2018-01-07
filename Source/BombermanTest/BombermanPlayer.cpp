@@ -81,6 +81,12 @@ void ABombermanPlayer::RegisterBombExploded()
 	bombsOut--;
 }
 
+void ABombermanPlayer::Die()
+{
+	GetWorld()->DestroyActor(this);
+	ABombermanTestGameModeBase::instance->PlayerKilled();
+}
+
 void ABombermanPlayer::PlantBomb()
 {
 	if (!remoteControlled)

@@ -67,6 +67,8 @@ public:
 	Responsible for destroying the blocks, and playing an explosion animation
 	*/
 	void DoBombAt(int32 x, int32 y, int32 range);
+	void CheckOverlappingGameElements(FVector position);
+	bool DidDestroyBlock(int32 indx);
 	
 private:
 	TArray<TileType> tiles;

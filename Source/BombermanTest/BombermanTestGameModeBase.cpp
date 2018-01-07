@@ -50,3 +50,9 @@ void ABombermanTestGameModeBase::ExplodeBombAt(int32 x, int32 y, ABombermanPlaye
 {
 	mapGenerator->DoBombAt(x, y, range);
 }
+
+void ABombermanTestGameModeBase::PlayerKilled()
+{
+	alivePlayers--;
+}
+

@@ -39,6 +39,9 @@ public:
 		void StartGame();
 
 	void ExplodeBombAt(int32 x, int32 y, ABombermanPlayer *player, int32 range);
+
+	// Called when players are killed.  Needs to be managed through game mode so that when players die in the same explosion, there's no time discrepency
+	void PlayerKilled();
 	
 private:
 	int32 alivePlayers = 0;

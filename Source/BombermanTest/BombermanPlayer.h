@@ -55,6 +55,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		float remoteControlTimeLeft = 0;
 
+	UFUNCTION(BlueprintCallable)
+		void Die();
+
 
 private:
 	void MoveForward(float AxisValue);
