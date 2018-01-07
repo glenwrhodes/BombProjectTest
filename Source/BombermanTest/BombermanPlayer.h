@@ -41,7 +41,20 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		int32 bombsOut = 0;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool remoteControlled = false;
+
 	static int32 pCount;
+
+	UPROPERTY(EditAnywhere, Category = Bomberman)
+		TSubclassOf<class ABomb> BombBlueprint;
+
+	UFUNCTION()
+		void RegisterBombExploded();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		float remoteControlTimeLeft = 0;
+
 
 private:
 	void MoveForward(float AxisValue);
@@ -50,5 +63,6 @@ private:
 
 	void PlantBomb();
 
+	class ABomb* activeRemoteBomb;
 	
 };

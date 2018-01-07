@@ -2,6 +2,8 @@
 
 #include "BombermanPlayer.h"
 #include "Engine.h"
+#include "Bomb.h"
+#include "BombermanTestGameModeBase.h"
 
 int32 ABombermanPlayer::pCount = 0;
 
@@ -74,8 +76,57 @@ void ABombermanPlayer::MoveRight(float AxisValue)
 	MovementInput.Y = FMath::Clamp<float>(AxisValue, -1.0f, 1.0f);
 }
 
+void ABombermanPlayer::RegisterBombExploded()
+{
+	bombsOut--;
+}
+
 void ABombermanPlayer::PlantBomb()
 {
+	if (!remoteControlled)
+	{
+		if (bombsOut < maxBombs)
+		{
 
+			if (BombBlueprint)
+			{
+				bombsOut++;
+				FVector pos = GetActorLocation();
+				int32 x = (pos.X + 50.0f) / 100;
+				int32 y = (pos.Y + 50.0f) / 100;
+
+				pos.X = x * 100;
+				pos.Y = y * 100;
+				ABomb* b = GetWorld()->SpawnActor<ABomb>(BombBlueprint, pos, FRotator::ZeroRotator);
+				b->Init(this, 2.0f, bombRange);
+				b->OnExplodeDelegate.AddUObject(this, &ABombermanPlayer::RegisterBombExploded); // Register the bomb to notify player when it explodes
+			}
+		}
+	}
+	else
+	{
+		if (bombsOut == 0)
+		{
+
+			if (BombBlueprint)
+			{
+				bombsOut++;
+				FVector pos = GetActorLocation();
+				int32 x = (pos.X + 50.0f) / 100;
+				int32 y = (pos.Y + 50.0f) / 100;
+
+				pos.X = x * 100;
+				pos.Y = y * 100;
+				ABomb* b = GetWorld()->SpawnActor<ABomb>(BombBlueprint, pos, FRotator::ZeroRotator);
+				b->Init(this, 10.0f, bombRange);
+				b->OnExplodeDelegate.AddUObject(this, &ABombermanPlayer::RegisterBombExploded); // Register the bomb to notify player when it explodes
+				activeRemoteBomb = b;
+			}
+		}
+		else
+		{
+			activeRemoteBomb->Explode();
+		}
+	}
 }
 

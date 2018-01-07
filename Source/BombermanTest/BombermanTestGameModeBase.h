@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
 #include "MapGenerator.h"
+#include "BombermanPlayer.h"
 #include "BombermanTestGameModeBase.generated.h"
 
 /**
@@ -36,6 +37,8 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		void StartGame();
+
+	void ExplodeBombAt(int32 x, int32 y, ABombermanPlayer *player, int32 range);
 	
 private:
 	int32 alivePlayers = 0;

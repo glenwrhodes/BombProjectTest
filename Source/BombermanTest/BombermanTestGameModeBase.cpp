@@ -2,6 +2,7 @@
 
 #include "BombermanTestGameModeBase.h"
 #include "Engine.h"
+#include "Engine/World.h"
 
 ABombermanTestGameModeBase * ABombermanTestGameModeBase::instance = nullptr; // Initialize the singleton instance to nullptr
 
@@ -45,3 +46,7 @@ void ABombermanTestGameModeBase::StartGame()
 
 }
 
+void ABombermanTestGameModeBase::ExplodeBombAt(int32 x, int32 y, ABombermanPlayer * player, int32 range)
+{
+	mapGenerator->DoBombAt(x, y, range);
+}
