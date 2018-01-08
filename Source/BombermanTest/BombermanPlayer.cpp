@@ -118,9 +118,10 @@ void ABombermanPlayer::PlantBomb()
 	}
 	else
 	{
+		// If remote controlled...
 		if (bombsOut == 0)
 		{
-
+			// and no bombs out, then place a bomb.
 			if (BombBlueprint)
 			{
 				bombsOut++;
@@ -131,13 +132,14 @@ void ABombermanPlayer::PlantBomb()
 				pos.X = x * 100;
 				pos.Y = y * 100;
 				ABomb* b = GetWorld()->SpawnActor<ABomb>(BombBlueprint, pos, FRotator::ZeroRotator);
-				b->Init(this, 10.0f, bombRange);
+				b->Init(this, 10.0f, bombRange); // Set time to 10 seconds.
 				b->OnExplodeDelegate.AddUObject(this, &ABombermanPlayer::RegisterBombExploded); // Register the bomb to notify player when it explodes
 				activeRemoteBomb = b;
 			}
 		}
 		else
 		{
+			// otherwise, detonate the bomb that the player put out.
 			activeRemoteBomb->Explode();
 		}
 	}

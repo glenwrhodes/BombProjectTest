@@ -71,7 +71,6 @@ public:
 	bool DidDestroyBlock(int32 indx);
 	
 private:
-	TArray<TileType> tiles;
 	TArray<uint8> mapData;
 	TArray<AMapTilePiece*> mapPieces;
 	

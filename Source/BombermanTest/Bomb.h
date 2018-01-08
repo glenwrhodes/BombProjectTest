@@ -30,7 +30,7 @@ public:
 	ABombermanPlayer * myOwner = nullptr;
 	float detonationTime = 3.0f;
 
-	FExplodeDelegate OnExplodeDelegate;
+	FExplodeDelegate OnExplodeDelegate; // Called by the bomb when it explodes.
 
 	/* Initializes the bomb, declaring its player owner, detonation time and range
 	*/

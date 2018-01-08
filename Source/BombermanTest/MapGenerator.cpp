@@ -29,9 +29,11 @@ void AMapGenerator::Tick(float DeltaTime)
 
 }
 
+// Pre-generate the data that defines the map.
 void AMapGenerator::GenerateMapData()
 {
 
+	// Initialize everything to grass.
 	for (int i = 0; i < width; i++)
 	{
 		for (int j = 0; j < height; j++)
@@ -44,15 +46,19 @@ void AMapGenerator::GenerateMapData()
 	{
 		for (int j = 0; j < height; j++)
 		{
+			// Edge rows
 			if (i == 0 || j == 0 || i == width - 1 || j == height - 1)
 				mapData[(i * height) + j] = (uint8)TileType::invincible;
 
+			// The even spacing of invincible tiles throughout
 			if (i % 2 == 0 && j % 2 == 0)
 				mapData[(i * height) + j] = (uint8)TileType::invincible;
 
 		}
 	}
 
+	// For each interior invincible piece, randomly spawn one block above, below, or beside it.
+	// This generates the random board.
 	for (int i = 2; i < width - 1; i += 2)
 	{
 		for (int j = 2; j < height - 1; j += 2)
@@ -72,11 +78,20 @@ void AMapGenerator::GenerateMapData()
 		}
 	}
 
-	mapData[2 * height + 1] = (uint8)TileType::grass;
-	mapData[1 * height + 2] = (uint8)TileType::grass;
+	// Fix so that players won't get boxed in by two breakable pieces - which would force
+	// suicide when detonating the bomb. Remove the pieces below and beside the player.
+
+	// Player 1
+	mapData[14 * height + 1] = (uint8)TileType::grass;
+	mapData[15 * height + 2] = (uint8)TileType::grass;
+
+	// Player 2
+	mapData[14 * height + 15] = (uint8)TileType::grass;
+	mapData[15 * height + 14] = (uint8)TileType::grass;
 
 }
 
+// Generate the actual geometry of the map. Spawn tiles based on what was generated in the map data.
 void AMapGenerator::GenerateMapGeometry()
 {
 	FActorSpawnParameters SpawnInfo;
@@ -113,12 +128,15 @@ void AMapGenerator::GenerateMapGeometry()
 
 			mapPieces.Add(NewTile);
 
+			// Make the nagivation system regenerate this tile for future AI addition.
 			GetWorld()->GetNavigationSystem()->AddDirtyArea(FBox(location, max), (1 << 0) | (1 << 1) || (1 << 2));
 
 		}
 	}
 }
 
+// Called on each block to see if we should proceed beyond this block, or terminate the outward search.
+// @param indx - The tile index being checked
 bool AMapGenerator::DidDestroyBlock(int32 indx)
 {
 	bool shouldProceed = true; // Should we proceed with the check
@@ -131,15 +149,19 @@ bool AMapGenerator::DidDestroyBlock(int32 indx)
 		{
 			if (blockPiece->bIsDestructible)
 			{
+
 				// Replace the destructible tile with a grass piece
 				AMapTilePiece* NewTile = GetWorld()->SpawnActor<AMapTilePiece>(BPFloor, blockPiece->GetActorLocation(), FRotator::ZeroRotator);
-				GetWorld()->DestroyActor(blockPiece);
+				GetWorld()->DestroyActor(blockPiece); // Flag block for deletion.
 				mapPieces[indx] = NewTile;
 				mapData[indx] = (uint8)TileType::grass;
-				shouldProceed = false;
+
+				// This is a breakable tile, which means the explosion will not propagate further after destroying the tile.
+				shouldProceed = false; 
 
 				CheckOverlappingGameElements(blockPiece->GetActorLocation());
 
+				// This block was destroyed - should we spawn a pickup?
 				if (FMath::FRand() <= blockPiece->dropChance)
 				{
 					if (blockPiece->droppablePickups.Num() > 0)
@@ -210,6 +232,10 @@ void AMapGenerator::CheckOverlappingGameElements(FVector position)
 	}
 }
 
+// Begin the process of bombing a particular x and y coordinate on the grid.
+// @param x - X coordinate in the maze grid
+// @param y - Y coordinate in the maze grid
+// @param range - how far in each of the 4 directions to propagate the explosion.
 void AMapGenerator::DoBombAt(int32 x, int32 y, int32 range)
 {
 
@@ -225,7 +251,7 @@ void AMapGenerator::DoBombAt(int32 x, int32 y, int32 range)
 	}
 
 	// Horizontal left - starts ON bomb position. This is the only direction that also
-	// includes the bomb position;
+	// includes the bomb position - so, i = x
 	for (int i = x; i >= x - range; i--)
 	{
 		int indx = (i * height) + y;
