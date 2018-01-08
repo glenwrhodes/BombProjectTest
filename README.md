@@ -1,4 +1,4 @@
-# Project Bomb Test
+# "Blast It" - Project Bomb Test
 #### _Bomberman_ Remake test in Unreal Engine 4.18
 
 This is simple remake of BomberMan in Unreal Engine 4.18
