@@ -14,13 +14,23 @@ void ABombermanTestGameModeBase::BeginPlay()
 
 	// Singleton pattern to quickly access this game mode
 	instance = this;
-	StartGame();
+
 }
 
 void ABombermanTestGameModeBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (gameActive)
+	{
+
+		timeLeft -= DeltaTime;
+
+		if (timeLeft <= 0 || alivePlayers < 2)
+		{
+			EndGame();
+		}
+	}
 
 }
 
@@ -55,4 +65,41 @@ void ABombermanTestGameModeBase::PlayerKilled()
 {
 	alivePlayers--;
 }
+
+void ABombermanTestGameModeBase::EndGame()
+{
+	gameActive = false;
+
+	if (alivePlayers == 1)
+	{
+		TArray<AActor *> outActors;
+		UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABombermanPlayer::StaticClass(), outActors);
+
+		if (outActors.Num() > 0)
+		{
+			ABombermanPlayer *livingPlayer = Cast<ABombermanPlayer>(outActors[0]);
+			TriggerGameOver(alivePlayers, livingPlayer);
+		}
+		else
+		{
+			TriggerGameOver(0, nullptr);  // DRAW - both players dead.
+		}
+
+	}
+	else
+	{
+		TriggerGameOver(alivePlayers, nullptr); // DRAW - Time ran out
+	}
+
+}
+
+void ABombermanTestGameModeBase::TriggerGameOver_Implementation(int32 numAlivePlayers, ABombermanPlayer *winner) const
+{
+	// Must also manually do the reverse of the second local player creation. Remove the player from the game
+	// so that on restart, we don't have conflicting player counts.
+	APlayerController * player = UGameplayStatics::GetPlayerController(GetWorld(), 1);
+	UGameplayStatics::RemovePlayer(player, false);
+}
+
+
 

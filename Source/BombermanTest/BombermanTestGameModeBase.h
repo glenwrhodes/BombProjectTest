@@ -42,6 +42,12 @@ public:
 
 	// Called when players are killed.  Needs to be managed through game mode so that when players die in the same explosion, there's no time discrepency
 	void PlayerKilled();
+
+	UFUNCTION(BlueprintCallable)
+		void EndGame();
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Bomberman")
+		void TriggerGameOver(int32 numAlivePlayers, ABombermanPlayer *winner) const;
 	
 private:
 	int32 alivePlayers = 0;
