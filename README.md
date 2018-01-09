@@ -21,6 +21,7 @@ https://glenwrhodes.github.io/BombProjectTest/
 - Remote controlled bombs are triggered with the same key that is used to plant them. This effect lasts 10 seconds.
 - Smart camera that pans and zooms to keep all relevant items on screen - players, powerups and bombs.
 - Simple AI that follows you and tries to bomb you, runs away, and goes after pickups as they appear.
+- Powerups are driven by simple blueprints, making it easy for a game designer to create other powerups that hook into exposed properties without needing to write any C++.
 
 # Third Party Assets:
 - 3 textures from purchased assets - Painterly terrain textures, and Landscape stone. https://www.assetstore.unity3d.com/en/#!/content/15334 
@@ -39,4 +40,5 @@ https://glenwrhodes.github.io/BombProjectTest/
 
 # Notes
 - Some of the C++ aspects might be better served in Blueprints, and vice versa. 
-
+- Total development time, approximately 14.5 hours. 
+- AI is strictly blueprints. With more time, it would be made into a combination of C++ and Behaviour Trees / Blackboards.
