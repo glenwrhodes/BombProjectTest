@@ -15,7 +15,6 @@ ABombermanPlayer::ABombermanPlayer()
 	bombsOut = 0;
 	maxBombs = 1;
 	walkSpeed = 500.0f;
-
 }
 
 // Called when the game starts or when spawned

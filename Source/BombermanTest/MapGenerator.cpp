@@ -7,7 +7,7 @@
 #include "Powerup.h"
 #include "Engine.h"
 
-// Sets default values
+/// Sets default values
 AMapGenerator::AMapGenerator()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
@@ -15,21 +15,21 @@ AMapGenerator::AMapGenerator()
 
 }
 
-// Called when the game starts or when spawned
+/// Called when the game starts or when spawned
 void AMapGenerator::BeginPlay()
 {
 	Super::BeginPlay();
 	
 }
 
-// Called every frame
+/// Called every frame
 void AMapGenerator::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
 }
 
-// Pre-generate the data that defines the map.
+/// Pre-generate the data that defines the map.
 void AMapGenerator::GenerateMapData()
 {
 
@@ -89,9 +89,13 @@ void AMapGenerator::GenerateMapData()
 	mapData[14 * height + 15] = (uint8)TileType::grass;
 	mapData[15 * height + 14] = (uint8)TileType::grass;
 
+	// AI Player
+	mapData[7 * height + 7] = (uint8)TileType::grass;
+	mapData[7 * height + 8] = (uint8)TileType::grass;
+
 }
 
-// Generate the actual geometry of the map. Spawn tiles based on what was generated in the map data.
+/// Generate the actual geometry of the map. Spawn tiles based on what was generated in the map data.
 void AMapGenerator::GenerateMapGeometry()
 {
 	FActorSpawnParameters SpawnInfo;
@@ -135,8 +139,8 @@ void AMapGenerator::GenerateMapGeometry()
 	}
 }
 
-// Called on each block to see if we should proceed beyond this block, or terminate the outward search.
-// @param indx - The tile index being checked
+/// Called on each block to see if we should proceed beyond this block, or terminate the outward search.
+/// @param indx - The tile index being checked
 bool AMapGenerator::DidDestroyBlock(int32 indx)
 {
 	bool shouldProceed = true; // Should we proceed with the check
@@ -193,8 +197,8 @@ bool AMapGenerator::DidDestroyBlock(int32 indx)
 	return shouldProceed;
 }
 
-// Check to see what, if anything we are overlapping at a position.
-// @param position - The vector position in worldspace we are checking.
+/// Check to see what, if anything we are overlapping at a position.
+/// @param position - The vector position in worldspace we are checking.
 void AMapGenerator::CheckOverlappingGameElements(FVector position)
 {
 	TArray<AActor*> outActors;
@@ -232,10 +236,10 @@ void AMapGenerator::CheckOverlappingGameElements(FVector position)
 	}
 }
 
-// Begin the process of bombing a particular x and y coordinate on the grid.
-// @param x - X coordinate in the maze grid
-// @param y - Y coordinate in the maze grid
-// @param range - how far in each of the 4 directions to propagate the explosion.
+/// Begin the process of bombing a particular x and y coordinate on the grid.
+/// @param x - X coordinate in the maze grid
+/// @param y - Y coordinate in the maze grid
+/// @param range - how far in each of the 4 directions to propagate the explosion.
 void AMapGenerator::DoBombAt(int32 x, int32 y, int32 range)
 {
 

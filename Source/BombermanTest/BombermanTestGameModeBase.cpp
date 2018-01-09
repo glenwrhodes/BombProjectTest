@@ -12,7 +12,7 @@ void ABombermanTestGameModeBase::BeginPlay()
 	PrimaryActorTick.bStartWithTickEnabled = true;
 	PrimaryActorTick.bCanEverTick = true;
 
-	// Singleton pattern to quickly access this game mode
+	// Singleton to quickly access this game mode
 	instance = this;
 
 }
@@ -23,9 +23,9 @@ void ABombermanTestGameModeBase::Tick(float DeltaTime)
 
 	if (gameActive)
 	{
-
 		timeLeft -= DeltaTime;
 
+		// End game conditions - timer is finished, OR there are no living players.
 		if (timeLeft <= 0 || alivePlayers < 2)
 		{
 			EndGame();
@@ -49,13 +49,23 @@ void ABombermanTestGameModeBase::StartGame()
 
 	// Create a second local player.  Must do this manually, because Unreal Engine wants to spawn second
 	// players in another window, rather than on the same screen.
-	UGameplayStatics::CreatePlayer(GetWorld(), 1, true);
+	if (!useAI)
+	{
+		UGameplayStatics::CreatePlayer(GetWorld(), 1, true);
+	}
+	else
+	{
+		// TODO: Make this position NOT a magic number.
+		GetWorld()->SpawnActor<ABombermanPlayer>(AIPlayer, FVector(700.0f, 700.0f, 200.0f), FRotator::ZeroRotator);
+	}
+
 	timeLeft = roundTime;
 	alivePlayers = 2;
 	gameActive = true;
 
 }
 
+// Talks to the map generator and tells it to manage the explosion in the maze.
 void ABombermanTestGameModeBase::ExplodeBombAt(int32 x, int32 y, ABombermanPlayer * player, int32 range)
 {
 	mapGenerator->DoBombAt(x, y, range);
@@ -66,6 +76,7 @@ void ABombermanTestGameModeBase::PlayerKilled()
 	alivePlayers--;
 }
 
+// Called if the endgame conditions in the TICK function are satisfied.
 void ABombermanTestGameModeBase::EndGame()
 {
 	gameActive = false;
@@ -75,6 +86,7 @@ void ABombermanTestGameModeBase::EndGame()
 		TArray<AActor *> outActors;
 		UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABombermanPlayer::StaticClass(), outActors);
 
+		// Get the surviving player, and pass it to the TriggerGameOver blueprint event.
 		if (outActors.Num() > 0)
 		{
 			ABombermanPlayer *livingPlayer = Cast<ABombermanPlayer>(outActors[0]);
@@ -82,13 +94,14 @@ void ABombermanTestGameModeBase::EndGame()
 		}
 		else
 		{
+			// This should technically never be called, but we handle just in case no players were found.
 			TriggerGameOver(0, nullptr);  // DRAW - both players dead.
 		}
 
 	}
 	else
 	{
-		TriggerGameOver(alivePlayers, nullptr); // DRAW - Time ran out
+		TriggerGameOver(alivePlayers, nullptr); // DRAW - Time ran out, or both players dead.
 	}
 
 }

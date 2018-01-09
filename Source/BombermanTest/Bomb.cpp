@@ -11,13 +11,13 @@ ABomb::ABomb()
 
 }
 
-// Called when the game starts or when spawned
+/// Called when the game starts or when spawned
 void ABomb::BeginPlay()
 {
 	Super::BeginPlay();
 }
 
-// Called every frame
+/// Called every frame
 void ABomb::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
@@ -29,6 +29,8 @@ void ABomb::Tick(float DeltaTime)
 	}
 }
 
+/// Tells the bomb to 'explode'. Talks to the game mode to propagate the explosion to the map generator.
+/// and communicates via a delegate to all listening players.
 void ABomb::Explode()
 {
 	if (exploded) return;
@@ -51,6 +53,7 @@ void ABomb::Explode()
 	PrimaryActorTick.bCanEverTick = false;
 }
 
+/// Initialize the bomb - set owner, detonation time, and the explosion range.
 void ABomb::Init(ABombermanPlayer * owner, float detTime, int32 _range)
 {
 	myOwner = owner;

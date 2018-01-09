@@ -11,7 +11,23 @@ This is simple remake of BomberMan in Unreal Engine 4.18
 - Powerups - Extra bomb, increase explosion range, increase player speed, remote controlled bombs. 
 - Remote controlled bombs are triggered with the same key that is used to plant them. This effect lasts 10 seconds.
 - Smart camera that pans and zooms to keep all relevant items on screen - players, powerups and bombs.
+- Simple AI that follows you and tries to bomb you, runs away, and goes after pickups as they appear.
 
 # Third Party Assets:
 - 3 textures from purchased assets - Painterly terrain textures, and Landscape stone. https://www.assetstore.unity3d.com/en/#!/content/15334 
 - Pickup assets from purchased asset pack: https://assetstore.unity.com/packages/3d/props/items-for-mobile-7767
+
+# Future improvements / changes
+- Don't use GetAllActorsOfClass in the smart camera.  Keep a record of bombs, players and powerups via the Game Mode.
+- More sound effects.
+- Music.
+- Better user interface.
+- Network support for multiplayer online.
+- Player graphics - replace spheres with characters.
+- AI - smarter enemy player.
+- More powerup types.
+- Patrolling monsters.
+
+# Notes
+- Some of the C++ aspects might be better served in Blueprints, and vice versa. 
+
