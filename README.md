@@ -6,6 +6,12 @@ This is simple remake of BomberMan in Unreal Engine 4.18
 ## Code docs at:
 https://glenwrhodes.github.io/BombProjectTest/
 
+# Getting started
+- Download the repo, and load in Unreal Engine.  This has been developed with 4.18.2, Preview 4
+- Launch the editor and compile the C++ code
+- Start the game with Play, from the MENU scene (GameLevel/Menu)
+- Enjoy!
+
 # Features
 - Procedurally generated map - Automatically generates a bomberman-style map, using different 'tiles' - grass, unbreakable and breakable pieces. Procedural map also regenerates the navigation mesh for future AI.
 - Local 2 players - just spheres for now.  Overriding the Player viewport client class required to make 2 players use the same keyboard. As outlined here: https://wiki.unrealengine.com/Local_Multiplayer_Tips
